@@ -23,6 +23,19 @@ const reducer = (state, action) => {
       );
       return { ...state, conditions: newConditions };
 
+    case 'ADD_SORT':
+      return { ...state, sortSpecs: [...state.sortSpecs, action.payload] };
+
+    case 'REMOVE_SORT':
+      const newSortSpecs = state.sortSpecs.filter(
+        (x) =>
+          !(
+            x.columnName === action.payload.columnName &&
+            x.sortSpec === action.payload.sortSpec
+          )
+      );
+      return { ...state, sortSpecs: newSortSpecs };
+
     case 'RESET':
       return {
         ...state,

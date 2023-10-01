@@ -17,36 +17,76 @@ const getJWT = () => {
   return jwt;
 };
 
-export async function batchUpdate(data, arr, filters) {
+const getAuth = (token) => {
+  const auth = new google.auth.OAuth2({
+    clientId: process.env.NEXT_PUBLIC_CLIENT_ID, // Replace with your OAuth2 client ID
+    clientSecret: process.env.CLIENT_SECRET, // Replace with your OAuth2 client secret
+    redirectUri: process.env.NEXT_PUBLIC_CALLBACK_URL, // Replace with your redirect URI
+  });
+
+  auth.setCredentials({
+    access_token: token,
+  });
+
+  console.log('in f', auth);
+
+  return auth;
+};
+
+export async function batchUpdate(
+  data,
+  arr,
+  filters,
+  sorts,
+  spreadSheetId,
+  sheetId,
+  token
+) {
   try {
-    const jwt = getJWT();
-    const sheets = google.sheets({ version: 'v4', auth: jwt });
+    //const jwt = getJWT();
+    const auth = getAuth(token);
+    console.log('out f', auth);
+    //const sheets = google.sheets({ version: 'v4', auth: jwt });
+    const sheets = google.sheets({ version: 'v4', auth: auth });
+    const ssheetId = spreadSheetId;
+    const sheetid = sheetId;
     const my_range = {
-      sheetId: 0,
+      sheetId: sheetid,
       startRowIndex: 0,
       startColumnIndex: 0,
     };
 
     return await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: process.env.SPREADSHEET_ID,
+      spreadsheetId: ssheetId,
       resource: {
         includeSpreadsheetInResponse: true,
         requests: [
           {
             clearBasicFilter: {
-              sheetId: 0,
+              sheetId: sheetid,
             },
           },
+
           {
             pasteData: {
               coordinate: {
                 columnIndex: 0,
                 rowIndex: 0,
-                sheetId: 0,
+                sheetId: sheetid,
               },
               delimiter: ',',
               type: 'PASTE_NORMAL',
               data: data,
+            },
+          },
+          {
+            sortRange: {
+              range: {
+                sheetId: sheetid,
+                startRowIndex: 1,
+                startColumnIndex: 0,
+              },
+              sortSpecs: sorts,
             },
           },
           {
@@ -64,19 +104,6 @@ export async function batchUpdate(data, arr, filters) {
     });
   } catch (err) {
     console.log(err);
-    throw err;
-  }
-}
-
-//batchUpdate();
-
-export async function updateWithFilter(filterId) {
-  try {
-    const jwt = getJWT();
-    const sheets = google.sheets({ version: 'v4', auth: jwt });
-
-    return await sheets.spreadsheets.values.update();
-  } catch (err) {
     throw err;
   }
 }

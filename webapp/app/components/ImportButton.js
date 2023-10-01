@@ -6,7 +6,7 @@ import { FilterContext } from '@/context/filter.context';
 import { Cloud, Loader2 } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 
-function ImportButton() {
+function ImportButton({ ssid, sid }) {
   const { state } = useContext(FileContext);
   const { filterState } = useContext(FilterContext);
 
@@ -24,7 +24,7 @@ function ImportButton() {
         }
         return prevProgress + 5;
       });
-    }, 650);
+    }, 2200);
 
     return interval;
   };
@@ -40,6 +40,10 @@ function ImportButton() {
         csvString: state?.csvString,
         headers: state?.tableRows,
         conditions: filterState?.conditions,
+        sortSpecs: filterState?.sortSpecs,
+        spreadSheetId: ssid,
+        sheetId: sid,
+        token: JSON.parse(localStorage.getItem('user')).token,
       }),
     })
       .then((res) => res.json())
@@ -56,7 +60,7 @@ function ImportButton() {
   }
 
   return (
-    <div className='flex m-4 justify-center'>
+    <div className='flex justify-center mt-10 px-4'>
       {loading ? (
         <div className='fixed top-0 left-0 w-screen h-screen bg-black/25'></div>
       ) : null}
@@ -91,6 +95,7 @@ function ImportButton() {
           </div>
         </div>
       ) : null}
+
       <button
         onClick={handleClick}
         disable={loading}

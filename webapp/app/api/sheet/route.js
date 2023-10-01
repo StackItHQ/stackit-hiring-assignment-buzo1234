@@ -4,16 +4,19 @@ import { batchUpdate } from '@/lib/sheets';
 export const POST = async (request) => {
   try {
     const body = await request.json();
-    const { csvString, headers, conditions } = body;
-
-    const my_range = {
-      sheetId: 0,
-      startRowIndex: 0,
-      startColumnIndex: 0,
-    };
+    const {
+      csvString,
+      headers,
+      conditions,
+      sortSpecs,
+      spreadSheetId,
+      sheetId,
+      token,
+    } = body;
 
     let arr = [],
-      filters = [];
+      filters = [],
+      sorts = [];
     let count = 0;
 
     headers.map((h) => {
@@ -34,7 +37,7 @@ export const POST = async (request) => {
     });
 
     conditions.map((c) => {
-      const colStatus = headers.find((h) => h.name === c.columnName);
+      var colStatus = headers.find((h) => h.name === c.columnName);
       if (colStatus && colStatus.selected) {
         filters.push({
           filterCriteria: {
@@ -52,7 +55,25 @@ export const POST = async (request) => {
       }
     });
 
-    const res = await batchUpdate(csvString, arr, filters);
+    sortSpecs.map((s) => {
+      var colStatus = headers.find((h) => h.name === s.columnName);
+      if (colStatus && colStatus.selected) {
+        sorts.push({
+          sortOrder: s.sortSpec,
+          dimensionIndex: Number(colStatus.id),
+        });
+      }
+    });
+
+    const res = await batchUpdate(
+      csvString,
+      arr,
+      filters,
+      sorts,
+      spreadSheetId,
+      sheetId,
+      token
+    );
 
     if (res.status === 200) {
       return NextResponse.json(
@@ -61,10 +82,10 @@ export const POST = async (request) => {
       );
     }
 
-    return NextResponse.json({ message: 'Error', err }, { status: 500 });
+    return NextResponse.json({ message: 'Error', res }, { status: 500 });
   } catch (err) {
     return NextResponse.json(
-      { message: 'POST  Error', err: err },
+      { message: 'POST Error', err: err },
       { status: 500 }
     );
   }
