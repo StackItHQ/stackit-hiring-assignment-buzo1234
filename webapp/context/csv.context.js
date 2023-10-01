@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, createContext, useReducer } from 'react';
+import { createContext, useReducer } from 'react';
 
 const initialState = {
   fileName: '',

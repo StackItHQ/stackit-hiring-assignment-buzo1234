@@ -17,15 +17,20 @@ const getJWT = () => {
   return jwt;
 };
 
-export async function batchUpdate(data, arr) {
+export async function batchUpdate(data, arr, filters) {
   try {
     const jwt = getJWT();
     const sheets = google.sheets({ version: 'v4', auth: jwt });
+    const my_range = {
+      sheetId: 0,
+      startRowIndex: 0,
+      startColumnIndex: 0,
+    };
 
     return await sheets.spreadsheets.batchUpdate({
       spreadsheetId: process.env.SPREADSHEET_ID,
       resource: {
-        includeSpreadsheetInResponse: false,
+        includeSpreadsheetInResponse: true,
         requests: [
           {
             pasteData: {
@@ -37,6 +42,15 @@ export async function batchUpdate(data, arr) {
               delimiter: ',',
               type: 'PASTE_NORMAL',
               data: data,
+            },
+          },
+          {
+            addFilterView: {
+              filter: {
+                title: `Filter #${Math.floor(Math.random() * 100)}`,
+                range: my_range,
+                filterSpecs: filters,
+              },
             },
           },
           ...arr,

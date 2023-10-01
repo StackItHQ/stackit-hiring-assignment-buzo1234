@@ -6,6 +6,7 @@ import Dropzone from 'react-dropzone';
 import { Cloud, File, Loader2 } from 'lucide-react';
 import Papa from 'papaparse';
 import { FileContext } from '@/context/csv.context';
+import { FilterContext } from '@/context/filter.context';
 
 let interval = undefined;
 
@@ -14,6 +15,7 @@ function FileLoader() {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const { state, dispatch } = useContext(FileContext);
+  const { filterDispatch } = useContext(FilterContext);
   const [fileProcessed, setFileProcessed] = useState(false);
   const [csvData, setCsvData] = useState('');
   useEffect(() => {
@@ -64,6 +66,11 @@ function FileLoader() {
         type: 'INSERT_CSV_STRING',
         payload: contents,
       });
+
+      filterDispatch({
+        type: 'RESET',
+      });
+
       setFileProcessed(true);
       setUploadProgress(100);
       setIsUploading(false);

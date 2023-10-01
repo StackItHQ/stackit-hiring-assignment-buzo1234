@@ -1,10 +1,13 @@
 'use client';
 
 import { FileContext } from '@/context/csv.context';
+import { FilterContext } from '@/context/filter.context';
 import React, { useContext, useState } from 'react';
 
 function ImportButton() {
   const { state } = useContext(FileContext);
+  const { filterState } = useContext(FilterContext);
+
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
@@ -15,6 +18,7 @@ function ImportButton() {
       body: JSON.stringify({
         csvString: state?.csvString,
         headers: state?.tableRows,
+        conditions: filterState?.conditions,
       }),
     })
       .then((res) => res.json())
@@ -23,6 +27,10 @@ function ImportButton() {
       })
       .finally(() => setLoading(false));
   };
+
+  if (state.tableRows.length < 1) {
+    return <></>;
+  }
 
   return (
     <div className='flex m-4 justify-center'>

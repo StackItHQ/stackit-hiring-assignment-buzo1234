@@ -1,6 +1,7 @@
 import { FileContextProvider } from '@/context/csv.context';
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { FilterContextProvider } from '@/context/filter.context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +17,9 @@ export default function RootLayout({ children }) {
         className={inter.className}
         style={{ margin: 'auto', maxWidth: '80rem', padding: '2rem' }}
       >
-        <FileContextProvider>{children}</FileContextProvider>
+        <FilterContextProvider>
+          <FileContextProvider>{children}</FileContextProvider>
+        </FilterContextProvider>
       </body>
     </html>
   );

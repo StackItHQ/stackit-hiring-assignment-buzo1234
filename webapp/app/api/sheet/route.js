@@ -4,10 +4,18 @@ import { batchUpdate } from '@/lib/sheets';
 export const POST = async (request) => {
   try {
     const body = await request.json();
-    const { csvString, headers } = body;
+    const { csvString, headers, conditions } = body;
 
-    let arr = [];
+    const my_range = {
+      sheetId: 0,
+      startRowIndex: 0,
+      startColumnIndex: 0,
+    };
+
+    let arr = [],
+      filters = [];
     let count = 0;
+
     headers.map((h) => {
       if (!h.selected) {
         arr.push({
@@ -25,7 +33,26 @@ export const POST = async (request) => {
       }
     });
 
-    const res = await batchUpdate(csvString, arr);
+    conditions.map((c) => {
+      const colStatus = headers.find((h) => h.name === c.columnName);
+      if (colStatus && colStatus.selected) {
+        filters.push({
+          filterCriteria: {
+            condition: {
+              type: c.conditionType,
+              values: [
+                {
+                  userEnteredValue: c.param,
+                },
+              ],
+            },
+          },
+          columnIndex: Number(colStatus.id),
+        });
+      }
+    });
+
+    const res = await batchUpdate(csvString, arr, filters);
     console.log(res);
 
     if (res.status === 200) {
