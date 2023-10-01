@@ -45,9 +45,9 @@ export async function batchUpdate(data, arr, filters) {
             },
           },
           {
-            addFilterView: {
+            setBasicFilter: {
               filter: {
-                title: `Filter #${Math.floor(Math.random() * 100)}`,
+                /* title: `Filter #${Math.floor(Math.random() * 100)}`, */
                 range: my_range,
                 filterSpecs: filters,
               },
@@ -65,102 +65,13 @@ export async function batchUpdate(data, arr, filters) {
 
 //batchUpdate();
 
-export async function addFilters() {
-  const jwt = getJWT();
-  const sheets = google.sheets({ version: 'v4', auth: jwt });
-  const my_range = {
-    sheetId: 0,
-    startRowIndex: 0,
-    startColumnIndex: 0,
-  };
-  const addfilterviewrequest = {
-    addFilterView: {
-      filter: {
-        title: 'Test Filter',
-        range: my_range,
-        sortSpecs: [
-          {
-            dimensionIndex: 4,
-            sortOrder: 'DESCENDING',
-          },
-        ],
-        criteria: {
-          0: {
-            hiddenValues: ['A'],
-          },
-        },
-      },
-    },
-  };
-
-  try {
-    sheets.spreadsheets
-      .batchUpdate({
-        spreadsheetId: '1CozRRXIUDycoqOtrVN28bTzTNDyut9euvQ2vNrLubHg',
-        resource: {
-          includeSpreadsheetInResponse: false,
-          requests: [addfilterviewrequest],
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      });
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-export async function deleteDimension() {
+export async function updateWithFilter(filterId) {
   try {
     const jwt = getJWT();
     const sheets = google.sheets({ version: 'v4', auth: jwt });
-    const my_range = {
-      sheetId: 0,
-      startRowIndex: 0,
-      startColumnIndex: 0,
-    };
 
-    sheets.spreadsheets
-      .batchUpdate({
-        spreadsheetId: '1CozRRXIUDycoqOtrVN28bTzTNDyut9euvQ2vNrLubHg',
-        resource: {
-          includeSpreadsheetInResponse: false,
-          requests: [
-            {
-              updateDimensionProperties: {
-                range: {
-                  sheetId: 0,
-                  dimension: 'COLUMNS',
-                  startIndex: 0,
-                  endIndex: 1,
-                },
-                properties: {
-                  hiddenByUser: true,
-                },
-                fields: 'hiddenByUser',
-              },
-            },
-            {
-              updateDimensionProperties: {
-                range: {
-                  sheetId: 0,
-                  dimension: 'COLUMNS',
-                  startIndex: 1,
-                  endIndex: 2,
-                },
-                properties: {
-                  hiddenByUser: true,
-                },
-                fields: 'hiddenByUser',
-              },
-            },
-          ],
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      });
+    return await sheets.spreadsheets.values.update();
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }

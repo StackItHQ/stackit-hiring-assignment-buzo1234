@@ -53,7 +53,6 @@ export const POST = async (request) => {
     });
 
     const res = await batchUpdate(csvString, arr, filters);
-    console.log(res);
 
     if (res.status === 200) {
       return NextResponse.json(
