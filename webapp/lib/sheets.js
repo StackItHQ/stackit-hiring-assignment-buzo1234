@@ -33,6 +33,11 @@ export async function batchUpdate(data, arr, filters) {
         includeSpreadsheetInResponse: true,
         requests: [
           {
+            clearBasicFilter: {
+              sheetId: 0,
+            },
+          },
+          {
             pasteData: {
               coordinate: {
                 columnIndex: 0,
