@@ -105,7 +105,7 @@ function FileLoader() {
                   {/* <Cloud className='h-6 w-6 text-zinc-500 mb-2' /> */}
                   <p className='mb-2 text-sm text-zinc-700'>
                     <span className='font-semibold'>Click to upload</span> or
-                    drag and drop
+                    drag and drop (.csv)
                   </p>
                 </div>
 

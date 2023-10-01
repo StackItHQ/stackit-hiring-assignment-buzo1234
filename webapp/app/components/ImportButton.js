@@ -48,7 +48,7 @@ function ImportButton({ ssid, sid }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('res is ', data);
+        alert('Success!');
         clearInterval(progressInterval);
         setUploadProgress(100);
       })

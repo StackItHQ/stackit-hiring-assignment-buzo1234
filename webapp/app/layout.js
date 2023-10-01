@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'CSV Importer',
+  icons: {
+    icon: '/stackit.png',
+  },
   description: 'Made by Karan Dua',
 };
 

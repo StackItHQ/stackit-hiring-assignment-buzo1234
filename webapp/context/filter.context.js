@@ -17,8 +17,7 @@ const reducer = (state, action) => {
         (x) =>
           !(
             x.columnName === action.payload.columnName &&
-            x.conditionType === action.payload.conditionType &&
-            x.param === action.payload.param
+            x.conditionType === action.payload.conditionType
           )
       );
       return { ...state, conditions: newConditions };

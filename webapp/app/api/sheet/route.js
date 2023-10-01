@@ -37,17 +37,20 @@ export const POST = async (request) => {
     });
 
     conditions.map((c) => {
+      var params = [];
+      c.param.map((par) =>
+        params.push({
+          userEnteredValue: par,
+        })
+      );
+
       var colStatus = headers.find((h) => h.name === c.columnName);
       if (colStatus && colStatus.selected) {
         filters.push({
           filterCriteria: {
             condition: {
               type: c.conditionType,
-              values: [
-                {
-                  userEnteredValue: c.param,
-                },
-              ],
+              values: params,
             },
           },
           columnIndex: Number(colStatus.id),

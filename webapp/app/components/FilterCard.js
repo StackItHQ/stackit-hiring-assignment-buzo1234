@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { conditionTypes } from '@/DATA/filterData';
 import { FilterContext } from '@/context/filter.context';
 
@@ -8,14 +8,24 @@ function FilterCard({ headers }) {
   const [column, setColumn] = useState();
   const [sort, setSort] = useState();
   const [condition, setCondition] = useState();
-  const [param, setParam] = useState('');
+  const [param, setParam] = useState([]);
 
   const { filterDispatch } = useContext(FilterContext);
 
+  console.log(param);
+
+  useEffect(() => {
+    setParam([]);
+  }, [condition]);
+
+  const findNumInputs = (id) => {
+    const cond = conditionTypes.find((c) => c.id === id);
+    return Number(cond.inputs);
+  };
+
   function handleSubmit(e) {
     e.preventDefault();
-    if (column?.length < 1 || condition?.length < 1 || param?.length < 1)
-      return;
+    if (column?.length < 1 || condition?.length < 1) return;
 
     filterDispatch({
       type: 'ADD_CONDITION',
@@ -28,7 +38,7 @@ function FilterCard({ headers }) {
 
     setColumn('');
     setCondition('');
-    setParam('');
+    setParam([]);
   }
 
   return (
@@ -48,11 +58,13 @@ function FilterCard({ headers }) {
             Select Column
           </option>
           {headers.map((head, i) => {
-            return (
-              <option key={i} value={head.name}>
-                {head.name}
-              </option>
-            );
+            if (head.selected) {
+              return (
+                <option key={i} value={head.name}>
+                  {head.name}
+                </option>
+              );
+            }
           })}
         </select>
 
@@ -76,13 +88,31 @@ function FilterCard({ headers }) {
         </select>
 
         {condition && (
-          <input
-            type='text'
-            placeholder='Enter value'
-            value={param}
-            className='w-full flex px-2 py-1 text-zinc-600 rounded-md border-[1.5px] bg-gray-100 border-gray-300'
-            onChange={(e) => setParam(e.target.value)}
-          />
+          <div
+            className={
+              findNumInputs(condition) > 1
+                ? 'grid grid-cols-2 gap-2'
+                : 'grid grid-cols-1 w-full'
+            }
+          >
+            {Array.from(Array(findNumInputs(condition))).map((_, i) => {
+              return (
+                <input
+                  key={i}
+                  type='text'
+                  placeholder='Enter value'
+                  value={param[i]}
+                  className='w-full flex px-2 py-1 text-zinc-600 rounded-md border-[1.5px] bg-gray-100 border-gray-300'
+                  onChange={(e) => {
+                    var vals = [...param];
+                    if (param.length < i + 1) param.push('');
+                    vals[i] = e.target.value;
+                    setParam(vals);
+                  }}
+                />
+              );
+            })}
+          </div>
         )}
 
         <button

@@ -28,7 +28,6 @@ const getAuth = (token) => {
     access_token: token,
   });
 
-  console.log('in f', auth);
 
   return auth;
 };
@@ -45,7 +44,6 @@ export async function batchUpdate(
   try {
     //const jwt = getJWT();
     const auth = getAuth(token);
-    console.log('out f', auth);
     //const sheets = google.sheets({ version: 'v4', auth: jwt });
     const sheets = google.sheets({ version: 'v4', auth: auth });
     const ssheetId = spreadSheetId;

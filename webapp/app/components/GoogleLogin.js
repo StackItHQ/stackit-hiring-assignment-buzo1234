@@ -12,7 +12,7 @@ function GoogleLogin() {
 
       <Link
         href={url}
-        className='cursor-pointer bg-white text-black font-semibold text-xl flex w-full text-center shadow-lg py-5 rounded-full justify-center items-center space-x-4'
+        className='cursor-pointer bg-white text-black font-semibold text-xl flex w-fit text-center shadow-lg px-24  py-5 rounded-full justify-center items-center space-x-4'
       >
         <Image src="/google.svg" width={40} height={40} className='object-contain mr-8' />
         Login with Google

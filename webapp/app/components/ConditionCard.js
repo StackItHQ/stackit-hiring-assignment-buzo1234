@@ -5,6 +5,8 @@ import { X } from 'lucide-react';
 function ConditionCard({ filter }) {
   const { filterDispatch } = useContext(FilterContext);
 
+  console.log(filter);
+
   function remove() {
     filterDispatch({
       type: 'REMOVE_CONDITION',
@@ -34,7 +36,11 @@ function ConditionCard({ filter }) {
       </div>
       <div className='flex items-center justify-start border-zinc-500 border-l-2'>
         <div className='w-4 mr-2 h-[2px] bg-zinc-500'></div>
-        <p>{filter.param}</p>
+        <p>
+          {filter.param.map((p, i) => {
+            return <span key={i}>{i > 0 ? `, ${p}` : p}</span>;
+          })}
+        </p>
       </div>
     </div>
   );
