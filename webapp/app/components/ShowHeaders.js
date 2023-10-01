@@ -8,7 +8,7 @@ function ShowHeaders() {
   const { state } = useContext(FileContext);
   return (
     <div className='m-4'>
-      {state && state.tableRows.length > 0 && (
+      {state && state.tableRows?.length > 0 && (
         <div>
           <h2 className='text-lg text-zinc-800 font-semibold'>
             Please select the headers to include:

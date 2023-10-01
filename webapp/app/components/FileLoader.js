@@ -1,64 +1,77 @@
 'use client';
 
 import { Progress } from '@/components/ui/progress';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { Cloud, File, Loader2 } from 'lucide-react';
 import Papa from 'papaparse';
 import { FileContext } from '@/context/csv.context';
+
+let interval = undefined;
 
 function FileLoader() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const { state, dispatch } = useContext(FileContext);
+  const [fileProcessed, setFileProcessed] = useState(false);
+  const [csvData, setCsvData] = useState('');
+  useEffect(() => {
+    if (isUploading) {
+      console.log(isUploading);
+      interval = setInterval(function () {
+        console.log('here');
+        if (uploadProgress < 95) {
+          setUploadProgress((prev) => prev + 5);
+        }
+      }, 300);
+    }
 
-  const startSimulatedProgress = () => {
+    return () => clearInterval(interval);
+  }, [isUploading]);
+
+  async function parseCSV(file) {
+    if (!file) return;
+    setFileProcessed(false);
     setUploadProgress(0);
 
-    const interval = setInterval(() => {
-      setUploadProgress((prevProgress) => {
-        if (prevProgress >= 95) {
-          clearInterval(interval);
-          return prevProgress;
-        }
-        return prevProgress + 5;
-      });
-    }, 500);
+    // Event listener on reader when the file
+    // loads, we parse it and set the data.
 
-    return interval;
-  };
-
-  function parseCSV(file) {
-    if (!file) return;
     Papa.parse(file, {
       header: true,
-      skipEmptyLines: true,
-      complete: function (results) {
-        const rowsArray = [];
-        const valuesArray = [];
-
-        // Iterating data to get column name and their values
-        results.data.map((d) => {
-          rowsArray.push(
-            Object.keys(d).map((x) => {
-              return { name: x, selected: true };
-            })
-          );
-          valuesArray.push(Object.values(d));
+      preview: 1,
+      step: function (results, parser) {
+        const columns = Object.keys(results.data).map((x, i) => {
+          return { id: i, name: x, selected: true };
         });
-
         dispatch({
           type: 'INSERT_ALL_DATA',
           payload: {
             fileName: file.name,
-            tableRows: rowsArray[0],
-            values: valuesArray,
-            parsedData: results.data,
+            tableRows: columns,
           },
         });
+        parser.abort();
       },
     });
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const contents = e.target.result;
+      setCsvData(contents);
+      dispatch({
+        type: 'INSERT_CSV_STRING',
+        payload: contents,
+      });
+      setFileProcessed(true);
+      setUploadProgress(100);
+      setIsUploading(false);
+    };
+
+    reader.readAsText(file);
+
+    //console.log('data', data);
   }
 
   return (
@@ -67,13 +80,8 @@ function FileLoader() {
         multiple={false}
         onDrop={async (acceptedFile) => {
           setIsUploading(true);
-
-          const progressInterval = startSimulatedProgress();
+          //const progressInterval = startSimulatedProgress();
           parseCSV(acceptedFile[0]);
-          console.log(state?.fileName);
-
-          clearInterval(progressInterval);
-          setUploadProgress(100);
         }}
       >
         {({ getRootProps, getInputProps, acceptedFiles }) => (

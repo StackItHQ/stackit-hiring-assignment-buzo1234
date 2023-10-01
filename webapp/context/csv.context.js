@@ -7,6 +7,7 @@ const initialState = {
   tableRows: [],
   values: [],
   parsedData: [],
+  csvString: '',
 };
 
 const reducer = (state, action) => {
@@ -21,7 +22,8 @@ const reducer = (state, action) => {
         return header;
       });
       return { ...state, tableRows: newTableRows };
-
+    case 'INSERT_CSV_STRING':
+      return { ...state, csvString: action.payload };
     case 'RESET':
       return {
         ...state,

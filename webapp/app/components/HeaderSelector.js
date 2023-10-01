@@ -4,10 +4,9 @@ import { FileContext } from '@/context/csv.context';
 import { useContext } from 'react';
 
 function HeaderSelector({ header, id }) {
-  const { dispatch } = useContext(FileContext);
-
+  const { dispatch, state } = useContext(FileContext);
   return (
-    <div>
+    <div className='flex w-full'>
       <div className='flex gap-2 my-1 items-center'>
         <input
           onClick={() =>
@@ -25,10 +24,12 @@ function HeaderSelector({ header, id }) {
           className={
             header.selected
               ? 'appearance-none w-4 h-4 border-2 border-black bg-green-500'
-              : 'appearance-none w-4 h-4 border-2 border-black bg-red-500'
+              : 'appearance-none w-4 h-4 border-2 border-black bg-white'
           }
         />
-        <label htmlFor={id}>{header.name}</label>
+        <label className='flex-1' htmlFor={id}>
+          {header.name}
+        </label>
       </div>
     </div>
   );
