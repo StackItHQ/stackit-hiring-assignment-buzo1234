@@ -217,6 +217,6 @@ The values and vision of Stackit resonate strongly with me, and I would love the
 
 Thank you for inspiring me with your work, and I look forward to the possibility of joining forces to create something remarkable together.
 
-[![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/)
+[![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/karandua2002)
 &nbsp;
-[![GitHub](https://i.stack.imgur.com/tskMh.png) GitHub](https://github.com/)
+[![GitHub](https://i.stack.imgur.com/tskMh.png) GitHub](https://github.com/buzo1234)
