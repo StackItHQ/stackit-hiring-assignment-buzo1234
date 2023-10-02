@@ -24,7 +24,7 @@ export const POST = async (request) => {
         arr.push({
           deleteDimension: {
             range: {
-              sheetId: 0,
+              sheetId: sheetId,
               dimension: 'COLUMNS',
               startIndex: h.id - count,
               endIndex: h.id + 1 - count,

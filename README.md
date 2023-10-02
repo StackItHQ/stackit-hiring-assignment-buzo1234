@@ -63,4 +63,147 @@ Feel free to check the discussions tab, you might get something of help there. C
 ### Video Demo
 https://github.com/StackItHQ/stackit-hiring-assignment-buzo1234/assets/44663554/0cd09a35-21e0-46ac-b016-4a8015207ae4
 
+### Approach
+Let's divide the problem statement into four different parts.
+1. Authentication
+2. CSV file parsing
+3. Sorting and Filtering
+4. Selecting sheet and Import
 
+#### Authentication
+- We need to know user's authenticity, as we need their consent to view and modify their spreadsheets.
+- We will use Google OAuth for this with the following scopes.
+    1. https://www.googleapis.com/auth/spreadsheets,
+    2. https://www.googleapis.com/auth/drive.file,
+    3. https://www.googleapis.com/auth/drive,
+
+##### Explainer diagram
+![Google OAuth](https://media.geeksforgeeks.org/wp-content/uploads/20220111131226/Screenshot20220111131209-660x477.png)
+
+#### CSV file parsing and Column selection
+- Next, we need to gather information about our CSV files.
+- We can use FileReaders to read our CSV.
+- Information collected will be.
+    1. Headers (First line of CSV)
+    2. Entire CSV in a string format (Useful in batch updating google sheets)
+
+For this I wil be utilizing a npm module called **PapaParser**
+
+##### Step screenshot
+![Column selection](/images/column-selection.png)
+
+#### Sorting and Filtering
+- Now, we need to give users and extra level of comfort by including an option to filter and/or sort their csv data.
+- Sorting specifications may include
+    1. Asceding sort
+    2. Descending sort
+- Filtering criterias may include
+    1. Number greater than
+    2. Number less than
+    3. Number equal to
+    4. Number less than and equal to
+    5. Number greater than and equal to
+    6. Number between
+    7. Text contains
+    8. Text starts with
+    9. Text ends with ...and many more.
+
+- This part made me focus majorly on the documentaion of google sheets api.
+- All the queries will be under **batchUpdate** and subsequent requests for each of the sorting specifications and filtering criterias will be appended in the final request.
+- API calls will only be made in the final(4th) step.
+
+##### Step screenshot
+![Filtering and Sorting](/images/filtering.png)
+
+#### Selecting sheet and Import
+- Furthermore, we need to give option to the user for selecting exactly where the CSV has to imported.
+- We can unique identity someone's sheet using two values, SpreadSheetID and SheetID.
+- Now that we have that details, we can import the csv into the correct spreadsheet.
+
+
+#### Sheets API
+###### Following is the layout of data we pass to the google sheets api.
+
+We are using batchUpdate query for this.
+```json
+{
+    "spreadsheetId": <Users's spreadsheet ID>,
+    "resource" : {
+        "includeSpreadsheetInResponse": true,
+        "request":[
+            /* Clear initial filter on the sheet */
+            {
+                "clearBasicFilter": {
+                    "sheetId": <Users's sheet ID>
+                }
+            },
+
+            /* Paste data in sheets using csv data's string */
+            {
+                "pasteData":{
+                    "coordinate":{
+                        "columnIndex": 0,
+                        "rowIndex":0,
+                        "sheetId": <User's sheet ID>
+                    },
+                    "delimiter": ",",
+                    "type": "PASTE_NORMAL",
+                    "data": <String from CSV file>
+                }
+            },
+
+            /* Applying sorting specifications */
+            {
+                "sortRange":{
+                    "range":{
+                        "sheetId":<User's sheet ID>,
+                        "startRowIndex": 1,
+                        "startColumnIndex": 0,
+                    },
+                    "sortSpecs": [
+                        /* Array of sorting criterias */
+                        {
+                            "sortOrder": "ASCENDING/DESCENDING",
+                            "dimensionIndex": <Column Index>
+                        }
+                    ]
+                }
+            },
+
+            /* Applying filters */
+            {
+                "setBasicFilter": {
+                    "filter":{
+                        "range":<Sheet range>,
+                        "filterSpecs": [
+                            /* Array of all filter specs */
+                            {
+                               "filterCriteria":{
+                                "condition":{
+                                    "type":<Condition Type>,
+                                    "value":[
+                                        /* Array of string values */
+                                    ]
+                                }
+                               } 
+                            }
+                        ]
+                    }
+                }
+            },
+
+            /* Deleting columns that are unmarked */
+            /* We need to keep decrementing the column index of the unselected ones after one column is deleted */
+            {
+                "deleteDimension":{
+                    "range":{
+                        "dimension": "ROWS/COLUMNS",
+                        "startIndex": <Column index>,
+                        "endIndex": <Column Index + 1>
+                    }
+                }
+            }
+        ]
+    }
+}
+```
