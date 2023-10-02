@@ -61,7 +61,8 @@ Feel free to check the discussions tab, you might get something of help there. C
 *Add your video here, and your approach to the problem (optional). Leave some comments for us here if you want, we will be reading this :)*
 
 ### Video Demo
-https://github.com/StackItHQ/stackit-hiring-assignment-buzo1234/assets/44663554/0cd09a35-21e0-46ac-b016-4a8015207ae4
+https://github.com/StackItHQ/stackit-hiring-assignment-buzo1234/assets/44663554/c05ee3d7-cd5f-46a3-bacf-9f7187eb86f2
+
 
 **Personal note at last**
 
