@@ -52,7 +52,7 @@ We have a checklist at the bottom of this README file, which you should update a
 - ✅ I have recorded a video showing it working and embedded it in the README ▶️
 - ✅ I have tested all the normal working cases 😎
 - ✅ I have even solved some edge cases (brownie points) 💪
-- [ ] I added my very planned-out approach to the problem at the end of this README 📜
+- ✅ I added my very planned-out approach to the problem at the end of this README 📜
 
 ## Got Questions❓
 Feel free to check the discussions tab, you might get something of help there. Check out that tab before reaching out to us. Also, did you know, the internet is a great place to explore 😛
@@ -62,6 +62,8 @@ Feel free to check the discussions tab, you might get something of help there. C
 
 ### Video Demo
 https://github.com/StackItHQ/stackit-hiring-assignment-buzo1234/assets/44663554/0cd09a35-21e0-46ac-b016-4a8015207ae4
+
+**Personal note at last**
 
 ### Approach
 Let's divide the problem statement into four different parts.
@@ -207,3 +209,14 @@ We are using batchUpdate query for this.
     }
 }
 ```
+
+### Personal Note
+I wanted to share that I, too, have a deep passion for entrepreneurship. Over the years, I've cultivated my skills and honed my ability to identify opportunities, take calculated risks, and bring creative ideas to life. I believe that entrepreneurship is not just about building businesses but also about making a meaningful difference in the world.
+
+The values and vision of Stackit resonate strongly with me, and I would love the opportunity to explore potential synergies and ways we could collaborate in the future. Whether it's through partnership, mentorship, or any other form of engagement, I am eager to contribute my entrepreneurial mindset and expertise to support your journey.
+
+Thank you for inspiring me with your work, and I look forward to the possibility of joining forces to create something remarkable together.
+
+[![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/)
+&nbsp;
+[![GitHub](https://i.stack.imgur.com/tskMh.png) GitHub](https://github.com/)
