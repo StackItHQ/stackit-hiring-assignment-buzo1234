@@ -213,7 +213,7 @@ We are using batchUpdate query for this.
 ### Personal Note
 I wanted to share that I, too, have a deep passion for entrepreneurship. Over the years, I've cultivated my skills and honed my ability to identify opportunities, take calculated risks, and bring creative ideas to life. I believe that entrepreneurship is not just about building businesses but also about making a meaningful difference in the world.
 
-The values and vision of Stackit resonate strongly with me, and I would love the opportunity to explore potential synergies and ways we could collaborate in the future. Whether it's through partnership, mentorship, or any other form of engagement, I am eager to contribute my entrepreneurial mindset and expertise to support your journey.
+The values and vision of Stackit resonate strongly with me, and I would love the opportunity to work with you guys in the future. Whether it's through internship, mentorship, or any other form of engagement, I am eager to contribute my entrepreneurial mindset and expertise to support your journey.
 
 Thank you for inspiring me with your work, and I look forward to the possibility of joining forces to create something remarkable together.
 
